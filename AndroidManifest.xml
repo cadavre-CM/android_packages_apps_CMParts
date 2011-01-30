@@ -66,6 +66,11 @@
                 <category android:name="com.cyanogenmod.cmparts.SHORTCUT" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ExtendedLockscreenActivity" android:label="@string/ext_ls_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.SystemActivity"
             android:label="@string/system_settings_title_head">
             <intent-filter>

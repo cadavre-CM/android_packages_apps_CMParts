@@ -40,9 +40,12 @@
     <string name="pref_electron_beam_animation_on">Screen-on animation</string>
     <string name="pref_electron_beam_animation_off">Screen-off animation</string>
 
-    <!-- User interface : 180 degree rotation -->
-    <string name="pref_rotate_180_title">Rotate 180 degrees</string>
-    <string name="pref_rotate_180_summary">Allows additional 180 degree rotation when auto-rotate screen is activated</string>
+    <!-- User interface : rotation -->
+    <string name="ui_rotation_title">Rotation</string>
+
+    <string name="pref_rotation_90_title">Rotate 90 degrees</string>
+    <string name="pref_rotation_180_title">Rotate 180 degrees</string>
+    <string name="pref_rotation_270_title">Rotate 270 degrees</string>
 
     <!-- User interface : LED Notifications -->
     <string name="trackball_title">LED notifications</string>
@@ -430,4 +433,37 @@
     <string name="changelog_error">Error loading changelog...</string>
     <string name="changelog_unknown">Unknown</string>
     <string name="changelog_version">Version</string>
+
+    <!-- HOLD unlock -->
+    <string name="pref_hold_unlock_title">HOLD unlock</string>
+    <string name="pref_hold_unlock_summary">Hold lock button to unlock</string>
+
+    <!-- Extended Lockscreen strings -->
+    <string name="ext_ls_settings_title">Extended Lockscreen</string>
+    <string name="ext_ls_title">Extended Lockscreen settings</string>
+
+    <string name="ext_ls_background_title">Lockscreen background</string>
+    <string name="ext_ls_background_summaryon">Will use /sdcard/lockscreen_wallpaper.png</string>
+    <string name="ext_ls_background_summaryoff">Will use system wallpaper</string>
+
+    <string name="ext_ls_unlock_possibility_title">Unlock ability</string>
+    <string name="ext_ls_unlock_possibility_text">Note: You need to enable trackball, menu key, hold key or gesture unlocking!</string>
+
+    <string name="ext_ls_visibility_title">Elements visibility</string>
+    <string name="ext_ls_counterbar_visibility_title">Counter bar</string>
+    <string name="ext_ls_counterbar_visibility_summary">Show unread/missed counter</string>
+    <string name="ext_ls_connectivitybar_visibility_title">Connectivity bar</string>
+    <string name="ext_ls_connectivitybar_visibility_summary">Show connectivity information bar</string>
+    <string name="ext_ls_genie_visibility_title">GenieWidget</string>
+    <string name="ext_ls_genie_visibility_summary">Show weather forecast</string>
+    <string name="ext_ls_nowplaying_visibility_title">Now playing</string>
+    <string name="ext_ls_nowplaying_visibility_summary">Show marquee with now playing</string>
+
+    <string name="ext_ls_notofications_title">Notifications</string>
+    <string name="ext_ls_smsmms_notification_title">New SMS/MMS message</string>
+    <string name="ext_ls_call_notification_title">Missed call</string>
+    <string name="ext_ls_gmail_notification_title">New Gmail message</string>
+    <string name="ext_ls_alarm_notification_title">Clock alarms</string>
+    <string name="ext_ls_state_notification_title">Phone state</string>
+    <string name="ext_ls_state_notification_summary">Sounds, vibration...</string>
 </resources>

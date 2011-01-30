@@ -2,6 +2,8 @@ package com.cyanogenmod.cmparts.activities;
 
 import com.cyanogenmod.cmparts.R;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
 import android.gesture.GestureLibraries;
@@ -34,6 +36,9 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
     private static final String LOCKSCREEN_DISABLE_UNLOCK_TAB = "lockscreen_disable_unlock_tab";
     private static final String MESSAGING_TAB_APP = "pref_messaging_tab_app";
 
+    private static final String HOLD_UNLOCK_PREF = "pref_hold_unlock";
+    private static final String EXTENDED_LOCKSCREEN_PREF = "ext_ls_settings";
+
     private CheckBoxPreference mMusicControlPref;
     private CheckBoxPreference mAlwaysMusicControlPref;
     private CheckBoxPreference mTrackballUnlockPref;
@@ -41,6 +46,10 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
     private CheckBoxPreference mQuickUnlockScreenPref;
     private CheckBoxPreference mPhoneMessagingTabPref;
     private CheckBoxPreference mDisableUnlockTab;
+
+    private CheckBoxPreference mHoldUnlockPref;
+    private PreferenceScreen mExtendedLockscreenPref;
+    private AlertDialog alertDialog;
 
     private ListPreference mLockscreenStylePref;
 
@@ -88,17 +97,26 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
         mPhoneMessagingTabPref.setChecked(Settings.System.getInt(getContentResolver(),
                 Settings.System.LOCKSCREEN_PHONE_MESSAGING_TAB, 0) == 1);
 
+        /* Extended Lockscreen preferences */
+        mExtendedLockscreenPref = (PreferenceScreen) prefSet.findPreference(EXTENDED_LOCKSCREEN_PREF);
+
         /* Lockscreen Style */
         mLockscreenStylePref = (ListPreference) prefSet.findPreference(LOCKSCREEN_STYLE_PREF);
         int lockscreenStyle = Settings.System.getInt(getContentResolver(),
                 Settings.System.LOCKSCREEN_STYLE_PREF, 1);
         mLockscreenStylePref.setValue(String.valueOf(lockscreenStyle));
         mLockscreenStylePref.setOnPreferenceChangeListener(this);
-        if (!isDefaultLockscreenStyle()) {
+        if (lockscreenStyle==1) {
+            mPhoneMessagingTabPref.setEnabled(true);
+            mExtendedLockscreenPref.setEnabled(false);
+        } else if (lockscreenStyle==2) {
             mPhoneMessagingTabPref.setEnabled(false);
             mPhoneMessagingTabPref.setChecked(false);
-        } else {
-            mPhoneMessagingTabPref.setEnabled(true);
+            mExtendedLockscreenPref.setEnabled(false);
+        } else if (lockscreenStyle==9) {
+            mPhoneMessagingTabPref.setEnabled(false);
+            mPhoneMessagingTabPref.setChecked(false);
+            mExtendedLockscreenPref.setEnabled(true);
         }
 
         /* Trackball Unlock */
@@ -109,6 +127,10 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
         mMenuUnlockPref = (CheckBoxPreference) prefSet.findPreference(MENU_UNLOCK_PREF);
         mMenuUnlockPref.setChecked(Settings.System.getInt(getContentResolver(),
                 Settings.System.MENU_UNLOCK_SCREEN, 0) == 1);
+        /* Hold Unlock */
+        mHoldUnlockPref = (CheckBoxPreference) prefSet.findPreference(HOLD_UNLOCK_PREF);
+        mHoldUnlockPref.setChecked(Settings.System.getInt(getContentResolver(),
+                HOLD_UNLOCK_PREF, 0) == 1);
 
         /* Disabling of unlock tab on lockscreen */
         mDisableUnlockTab = (CheckBoxPreference)
@@ -150,6 +172,9 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
     public void onResume() {
         super.onResume();
 
+        int lockscreenStyle = Settings.System.getInt(getContentResolver(),
+                Settings.System.LOCKSCREEN_STYLE_PREF, 1);
+
         mMessagingTabApp.setSummary(Settings.System.getString(getContentResolver(),
                 Settings.System.LOCKSCREEN_MESSAGING_TAB_APP));
         if (!doesUnlockAbilityExist()) {
@@ -160,12 +185,17 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
         } else {
             mDisableUnlockTab.setEnabled(true);
         }
-
-        if (!isDefaultLockscreenStyle()) {
+        if (lockscreenStyle==1) {
+            mPhoneMessagingTabPref.setEnabled(true);
+            mExtendedLockscreenPref.setEnabled(false);
+        } else if (lockscreenStyle==2) {
             mPhoneMessagingTabPref.setEnabled(false);
             mPhoneMessagingTabPref.setChecked(false);
-        } else {
-            mPhoneMessagingTabPref.setEnabled(true);
+            mExtendedLockscreenPref.setEnabled(false);
+        } else if (lockscreenStyle==9) {
+            mPhoneMessagingTabPref.setEnabled(false);
+            mPhoneMessagingTabPref.setChecked(false);
+            mExtendedLockscreenPref.setEnabled(true);
         }
     }
 
@@ -201,6 +231,11 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
             Settings.System.putInt(getContentResolver(),
                     Settings.System.MENU_UNLOCK_SCREEN, value ? 1 : 0);
             return true;
+        } else if (preference == mHoldUnlockPref) {
+            value = mHoldUnlockPref.isChecked();
+            Settings.System.putInt(getContentResolver(),
+                    HOLD_UNLOCK_PREF, value ? 1 : 0);
+            return true;
         } else if (preference == mDisableUnlockTab) {
             value = mDisableUnlockTab.isChecked();
             Settings.Secure.putInt(getContentResolver(),
@@ -216,11 +251,17 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
             int lockscreenStyle = Integer.valueOf((String) newValue);
             Settings.System.putInt(getContentResolver(), Settings.System.LOCKSCREEN_STYLE_PREF,
                     lockscreenStyle);
-            if (!isDefaultLockscreenStyle()) {
+            if (lockscreenStyle==1) {
+                mPhoneMessagingTabPref.setEnabled(true);
+                mExtendedLockscreenPref.setEnabled(false);
+            } else if (lockscreenStyle==2) {
                 mPhoneMessagingTabPref.setEnabled(false);
                 mPhoneMessagingTabPref.setChecked(false);
-            } else {
-                mPhoneMessagingTabPref.setEnabled(true);
+                mExtendedLockscreenPref.setEnabled(false);
+            } else if (lockscreenStyle==9) {
+                mPhoneMessagingTabPref.setEnabled(false);
+                mPhoneMessagingTabPref.setChecked(false);
+                mExtendedLockscreenPref.setEnabled(true);
             }
             return true;
         } else if (preference == mScreenLockTimeoutDelayPref) {
@@ -311,6 +352,8 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
                 Settings.System.TRACKBALL_UNLOCK_SCREEN, 0) == 1;
         boolean menuCanUnlock = Settings.System.getInt(getContentResolver(),
                 Settings.System.MENU_UNLOCK_SCREEN, 0) == 1;
+        boolean holdCanUnlock = Settings.System.getInt(getContentResolver(),
+                HOLD_UNLOCK_PREF, 0) == 1;
         GestureLibrary gl = GestureLibraries.fromFile(mStoreFile);
         if (gl.load()) {
             for (String name : gl.getGestureEntries()) {
@@ -320,20 +363,11 @@ public class LockscreenActivity extends PreferenceActivity implements OnPreferen
                 }
             }
         }
-        if (GestureCanUnlock || trackCanUnlock || menuCanUnlock) {
+        if (GestureCanUnlock || trackCanUnlock || menuCanUnlock || holdCanUnlock) {
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean isDefaultLockscreenStyle() {
-        int lockscreenStyle = Settings.System.getInt(getContentResolver(),
-                Settings.System.LOCKSCREEN_STYLE_PREF, 1);
-        if (lockscreenStyle == 1) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
