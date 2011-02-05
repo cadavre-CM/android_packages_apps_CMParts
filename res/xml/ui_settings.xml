@@ -50,6 +50,18 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
+    <!-- Statusbar music control -->
+    <PreferenceCategory android:title="@string/title_statusbar_music_control">
+        <CheckBoxPreference android:key="statusbar_music_controls"
+            android:title="@string/pref_statusbar_music_controls_title"
+            android:summary="@string/pref_statusbar_music_controls_summary" />
+
+        <CheckBoxPreference android:key="statusbar_always_music_controls"
+            android:dependency="statusbar_music_controls"
+            android:title="@string/pref_statusbar_always_music_controls_title"
+            android:summary="@string/pref_statusbar_always_music_controls_summary" />
+    </PreferenceCategory>
+
     <!-- Overscroll effect -->
     <PreferenceCategory android:title="@string/ui_overscroll_title">
         <ListPreference android:key="pref_overscroll_effect"

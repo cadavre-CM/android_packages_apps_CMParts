@@ -24,56 +24,42 @@ public class UIActivity extends PreferenceActivity implements OnPreferenceChange
 
     /* Preference Screens */
     private static final String NOTIFICATION_SCREEN = "notification_settings";
-
     private static final String NOTIFICATION_TRACKBALL = "trackball_notifications";
-
     private static final String EXTRAS_SCREEN = "tweaks_extras";
-
     private static final String GENERAL_CATEGORY = "general_category";
-
     private static final String UI_EXP_WIDGET = "expanded_widget";
-
     private static final String UI_EXP_WIDGET_HIDE_ONCHANGE = "expanded_hide_onchange";
-
     private static final String UI_EXP_WIDGET_COLOR = "expanded_color_mask";
-
     private static final String UI_EXP_WIDGET_PICKER = "widget_picker";
 
     private PreferenceScreen mStatusBarScreen;
-
     private PreferenceScreen mNotificationScreen;
-
     private PreferenceScreen mTrackballScreen;;
-
     private PreferenceScreen mExtrasScreen;
 
     /* Other */
     private static final String PINCH_REFLOW_PREF = "pref_pinch_reflow";
-
     private static final String RENDER_EFFECT_PREF = "pref_render_effect";
-
     private static final String POWER_PROMPT_PREF = "power_dialog_prompt";
-
     private static final String OVERSCROLL_PREF = "pref_overscroll_effect";
-
     private static final String OVERSCROLL_WEIGHT_PREF = "pref_overscroll_weight";
+    private static final String STATUSBAR_MUSIC_CONTROLS = "statusbar_music_controls";
+    private static final String STATUSBAR_ALWAYS_MUSIC_CONTROLS = "statusbar_always_music_controls";
 
+    private CheckBoxPreference mMusicControlPref;
+    private CheckBoxPreference mAlwaysMusicControlPref;
     private CheckBoxPreference mPinchReflowPref;
-
     private CheckBoxPreference mPowerPromptPref;
 
     private ListPreference mRenderEffectPref;
 
     private CheckBoxPreference mPowerWidget;
-
     private CheckBoxPreference mPowerWidgetHideOnChange;
 
     private Preference mPowerWidgetColor;
-
     private PreferenceScreen mPowerPicker;
 
     private ListPreference mOverscrollPref;
-
     private ListPreference mOverscrollWeightPref;
 
     @Override
@@ -118,6 +104,14 @@ public class UIActivity extends PreferenceActivity implements OnPreferenceChange
                 Settings.System.EXPANDED_VIEW_WIDGET, 1) == 1));
         mPowerWidgetHideOnChange.setChecked((Settings.System.getInt(getContentResolver(),
                 Settings.System.EXPANDED_HIDE_ONCHANGE, 0) == 1));
+
+        /* Status Music Controls */
+        mMusicControlPref = (CheckBoxPreference) prefSet.findPreference(STATUSBAR_MUSIC_CONTROLS);
+        mMusicControlPref.setChecked(Settings.System.getInt(getContentResolver(), 
+                Settings.System.STATUSBAR_MUSIC_CONTROLS, 1) == 1);
+        mAlwaysMusicControlPref = (CheckBoxPreference) prefSet.findPreference(STATUSBAR_ALWAYS_MUSIC_CONTROLS);
+        mAlwaysMusicControlPref.setChecked(Settings.System.getInt(getContentResolver(), 
+                Settings.System.STATUSBAR_ALWAYS_MUSIC_CONTROLS, 0) == 1);
 
         /* Overscroll Effect */
         mOverscrollPref = (ListPreference) prefSet.findPreference(OVERSCROLL_PREF);
@@ -182,6 +176,18 @@ public class UIActivity extends PreferenceActivity implements OnPreferenceChange
             ColorPickerDialog cp = new ColorPickerDialog(this, mWidgetColorListener,
                     readWidgetColor());
             cp.show();
+        }
+
+        if (preference == mMusicControlPref) {
+            value = mMusicControlPref.isChecked();
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.STATUSBAR_MUSIC_CONTROLS, value ? 1 : 0);
+        }
+
+        if (preference == mAlwaysMusicControlPref) {
+            value = mAlwaysMusicControlPref.isChecked();
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.STATUSBAR_ALWAYS_MUSIC_CONTROLS, value ? 1 : 0);
         }
 
         return true;

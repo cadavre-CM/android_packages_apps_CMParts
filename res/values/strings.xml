@@ -423,7 +423,7 @@
     <string name="gestures_toggle_sound">Toggle sound</string>
     <string name="gestures_flashlight">Flashlight</string>
     <string name="pref_lockscreen_disable_unlock_tab">Disable unlock slider</string>
-    <string name="pref_lockscreen_disable_unlock_tab_summary">Note: You need to enable trackball, menu key, or gesture unlocking before this option becomes available</string>
+    <string name="pref_lockscreen_disable_unlock_tab_summary">Note: You need to enable trackball, menu key, hold key or gesture unlocking before this option becomes available.</string>
     <string name="gestures_explain_create_screen">Pick an action to perform (or select Unlock or Sound) and draw a gesture on the screen.</string>
 
     <!-- Change Log strings -->
@@ -466,4 +466,11 @@
     <string name="ext_ls_alarm_notification_title">Clock alarms</string>
     <string name="ext_ls_state_notification_title">Phone state</string>
     <string name="ext_ls_state_notification_summary">Sounds, vibration...</string>
+
+    <!-- statusbar music controls -->
+    <string name="title_statusbar_music_control">Statusbar music</string>
+    <string name="pref_statusbar_music_controls_title">Statusbar music controls</string>
+    <string name="pref_statusbar_music_controls_summary">Displays music controls on the statusbar</string>
+    <string name="pref_statusbar_always_music_controls_title">Always display music controls</string>
+    <string name="pref_statusbar_always_music_controls_summary">Display music controls regardless of whether or not music is playing</string>
 </resources>
